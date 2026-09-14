@@ -12,13 +12,14 @@
       {
         "name": "dim_customer",
         "columns": [
-          { "name": "customer_key", "dataType": "int64", "sourceColumn": "customer_key" },
           { "name": "customer_id", "dataType": "string", "sourceColumn": "customer_id" },
+          { "name": "customer_name", "dataType": "string", "sourceColumn": "customer_name" },
+          { "name": "age", "dataType": "int64", "sourceColumn": "age" },
+          { "name": "monthly_income", "dataType": "double", "sourceColumn": "monthly_income" },
           { "name": "credit_score", "dataType": "int64", "sourceColumn": "credit_score" },
-          { "name": "risk_rating", "dataType": "string", "sourceColumn": "risk_rating" },
-          { "name": "annual_income", "dataType": "double", "sourceColumn": "annual_income" },
-          { "name": "employment_status", "dataType": "string", "sourceColumn": "employment_status" },
-          { "name": "geographic_region", "dataType": "string", "sourceColumn": "geographic_region" }
+          { "name": "credit_score_band", "dataType": "string", "sourceColumn": "credit_score_band" },
+          { "name": "employment_type", "dataType": "string", "sourceColumn": "employment_type" },
+          { "name": "region", "dataType": "string", "sourceColumn": "region" }
         ],
         "partitions": [
           {
@@ -28,9 +29,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_customer.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_customer.csv\"), [Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"customer_key\", Int64.Type}, {\"customer_id\", type text}, {\"credit_score\", Int64.Type}, {\"risk_rating\", type text}, {\"annual_income\", type number}, {\"employment_status\", type text}, {\"geographic_region\", type text}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"customer_id\", type text}, {\"customer_name\", type text}, {\"age\", Int64.Type}, {\"monthly_income\", type number}, {\"credit_score\", Int64.Type}, {\"credit_score_band\", type text}, {\"employment_type\", type text}, {\"region\", type text}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -41,14 +42,14 @@
       {
         "name": "dim_date",
         "columns": [
-          { "name": "date_key", "dataType": "int64", "sourceColumn": "date_key" },
-          { "name": "date", "dataType": "dateTime", "sourceColumn": "date" },
-          { "name": "year", "dataType": "int64", "sourceColumn": "year" },
-          { "name": "quarter", "dataType": "int64", "sourceColumn": "quarter" },
-          { "name": "month", "dataType": "int64", "sourceColumn": "month" },
+          { "name": "date_id", "dataType": "string", "sourceColumn": "date_id" },
+          { "name": "full_date", "dataType": "dateTime", "sourceColumn": "full_date" },
+          { "name": "year_num", "dataType": "int64", "sourceColumn": "year_num" },
+          { "name": "quarter_num", "dataType": "int64", "sourceColumn": "quarter_num" },
+          { "name": "month_num", "dataType": "int64", "sourceColumn": "month_num" },
           { "name": "month_name", "dataType": "string", "sourceColumn": "month_name" },
-          { "name": "day", "dataType": "int64", "sourceColumn": "day" },
-          { "name": "day_of_week", "dataType": "string", "sourceColumn": "day_of_week" }
+          { "name": "year_month", "dataType": "string", "sourceColumn": "year_month" },
+          { "name": "is_month_end", "dataType": "boolean", "sourceColumn": "is_month_end" }
         ],
         "partitions": [
           {
@@ -60,7 +61,7 @@
                 "let",
                 "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_date.csv\"), [Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"date_key\", Int64.Type}, {\"date\", type date}, {\"year\", Int64.Type}, {\"quarter\", Int64.Type}, {\"month\", Int64.Type}, {\"month_name\", type text}, {\"day\", Int64.Type}, {\"day_of_week\", type text}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"date_id\", type text}, {\"full_date\", type date}, {\"year_num\", Int64.Type}, {\"quarter_num\", Int64.Type}, {\"month_num\", Int64.Type}, {\"month_name\", type text}, {\"year_month\", type text}, {\"is_month_end\", type logical}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -71,16 +72,17 @@
       {
         "name": "dim_loan",
         "columns": [
-          { "name": "loan_key", "dataType": "int64", "sourceColumn": "loan_key" },
           { "name": "loan_id", "dataType": "string", "sourceColumn": "loan_id" },
-          { "name": "customer_key", "dataType": "int64", "sourceColumn": "customer_key" },
-          { "name": "product_key", "dataType": "int64", "sourceColumn": "product_key" },
-          { "name": "disbursement_date_key", "dataType": "int64", "sourceColumn": "disbursement_date_key" },
-          { "name": "maturity_date_key", "dataType": "int64", "sourceColumn": "maturity_date_key" },
+          { "name": "customer_id", "dataType": "string", "sourceColumn": "customer_id" },
+          { "name": "product_id", "dataType": "string", "sourceColumn": "product_id" },
+          { "name": "origination_date", "dataType": "dateTime", "sourceColumn": "origination_date" },
+          { "name": "origination_year_month", "dataType": "string", "sourceColumn": "origination_year_month" },
           { "name": "original_principal", "dataType": "double", "sourceColumn": "original_principal" },
-          { "name": "interest_rate", "dataType": "double", "sourceColumn": "interest_rate" },
+          { "name": "annual_interest_rate", "dataType": "double", "sourceColumn": "annual_interest_rate" },
           { "name": "term_months", "dataType": "int64", "sourceColumn": "term_months" },
-          { "name": "loan_status", "dataType": "string", "sourceColumn": "loan_status" }
+          { "name": "monthly_installment", "dataType": "double", "sourceColumn": "monthly_installment" },
+          { "name": "initial_credit_score", "dataType": "int64", "sourceColumn": "initial_credit_score" },
+          { "name": "initial_risk_grade", "dataType": "string", "sourceColumn": "initial_risk_grade" }
         ],
         "partitions": [
           {
@@ -90,9 +92,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_loan.csv\"), [Delimiter=\",\", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_loan.csv\"), [Delimiter=\",\", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"loan_key\", Int64.Type}, {\"loan_id\", type text}, {\"customer_key\", Int64.Type}, {\"product_key\", Int64.Type}, {\"disbursement_date_key\", Int64.Type}, {\"maturity_date_key\", Int64.Type}, {\"original_principal\", type number}, {\"interest_rate\", type number}, {\"term_months\", Int64.Type}, {\"loan_status\", type text}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"origination_date\", type date}, {\"origination_year_month\", type text}, {\"original_principal\", type number}, {\"annual_interest_rate\", type number}, {\"term_months\", Int64.Type}, {\"monthly_installment\", type number}, {\"initial_credit_score\", Int64.Type}, {\"initial_risk_grade\", type text}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -103,11 +105,13 @@
       {
         "name": "dim_product",
         "columns": [
-          { "name": "product_key", "dataType": "int64", "sourceColumn": "product_key" },
           { "name": "product_id", "dataType": "string", "sourceColumn": "product_id" },
           { "name": "product_name", "dataType": "string", "sourceColumn": "product_name" },
-          { "name": "product_type", "dataType": "string", "sourceColumn": "product_type" },
-          { "name": "collateral_type", "dataType": "string", "sourceColumn": "collateral_type" }
+          { "name": "product_category", "dataType": "string", "sourceColumn": "product_category" },
+          { "name": "collateral_type", "dataType": "string", "sourceColumn": "collateral_type" },
+          { "name": "min_term_months", "dataType": "int64", "sourceColumn": "min_term_months" },
+          { "name": "max_term_months", "dataType": "int64", "sourceColumn": "max_term_months" },
+          { "name": "base_annual_rate", "dataType": "double", "sourceColumn": "base_annual_rate" }
         ],
         "partitions": [
           {
@@ -117,9 +121,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_product.csv\"), [Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_product.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"product_key\", Int64.Type}, {\"product_id\", type text}, {\"product_name\", type text}, {\"product_type\", type text}, {\"collateral_type\", type text}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"product_id\", type text}, {\"product_name\", type text}, {\"product_category\", type text}, {\"collateral_type\", type text}, {\"min_term_months\", Int64.Type}, {\"max_term_months\", Int64.Type}, {\"base_annual_rate\", type number}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -130,13 +134,15 @@
       {
         "name": "fct_daily_repayment",
         "columns": [
-          { "name": "repayment_key", "dataType": "int64", "sourceColumn": "repayment_key" },
-          { "name": "loan_key", "dataType": "int64", "sourceColumn": "loan_key" },
-          { "name": "payment_date_key", "dataType": "int64", "sourceColumn": "payment_date_key" },
+          { "name": "repayment_id", "dataType": "string", "sourceColumn": "repayment_id" },
+          { "name": "payment_date_id", "dataType": "string", "sourceColumn": "payment_date_id" },
+          { "name": "payment_date", "dataType": "dateTime", "sourceColumn": "payment_date" },
+          { "name": "loan_id", "dataType": "string", "sourceColumn": "loan_id" },
           { "name": "principal_paid", "dataType": "double", "sourceColumn": "principal_paid" },
           { "name": "interest_paid", "dataType": "double", "sourceColumn": "interest_paid" },
-          { "name": "fee_paid", "dataType": "double", "sourceColumn": "fee_paid" },
-          { "name": "total_payment", "dataType": "double", "sourceColumn": "total_payment" }
+          { "name": "fees_paid", "dataType": "double", "sourceColumn": "fees_paid" },
+          { "name": "total_paid", "dataType": "double", "sourceColumn": "total_paid" },
+          { "name": "days_past_due_at_payment", "dataType": "int64", "sourceColumn": "days_past_due_at_payment" }
         ],
         "partitions": [
           {
@@ -146,9 +152,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_daily_repayment.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_daily_repayment.csv\"), [Delimiter=\",\", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"repayment_key\", Int64.Type}, {\"loan_key\", Int64.Type}, {\"payment_date_key\", Int64.Type}, {\"principal_paid\", type number}, {\"interest_paid\", type number}, {\"fee_paid\", type number}, {\"total_payment\", type number}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"repayment_id\", type text}, {\"payment_date_id\", type text}, {\"payment_date\", type date}, {\"loan_id\", type text}, {\"principal_paid\", type number}, {\"interest_paid\", type number}, {\"fees_paid\", type number}, {\"total_paid\", type number}, {\"days_past_due_at_payment\", Int64.Type}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -159,28 +165,32 @@
       {
         "name": "fct_loan_monthly_snapshot",
         "columns": [
-          { "name": "snapshot_key", "dataType": "int64", "sourceColumn": "snapshot_key" },
-          { "name": "snapshot_date_key", "dataType": "int64", "sourceColumn": "snapshot_date_key" },
-          { "name": "loan_key", "dataType": "int64", "sourceColumn": "loan_key" },
-          { "name": "customer_key", "dataType": "int64", "sourceColumn": "customer_key" },
-          { "name": "product_key", "dataType": "int64", "sourceColumn": "product_key" },
-          { "name": "outstanding_balance", "dataType": "double", "sourceColumn": "outstanding_balance" },
-          { "name": "principal_due", "dataType": "double", "sourceColumn": "principal_due" },
-          { "name": "interest_due", "dataType": "double", "sourceColumn": "interest_due" },
+          { "name": "snapshot_id", "dataType": "string", "sourceColumn": "snapshot_id" },
+          { "name": "snapshot_date_id", "dataType": "string", "sourceColumn": "snapshot_date_id" },
+          { "name": "snapshot_date", "dataType": "dateTime", "sourceColumn": "snapshot_date" },
+          { "name": "loan_id", "dataType": "string", "sourceColumn": "loan_id" },
+          { "name": "customer_id", "dataType": "string", "sourceColumn": "customer_id" },
+          { "name": "product_id", "dataType": "string", "sourceColumn": "product_id" },
+          { "name": "months_on_books", "dataType": "int64", "sourceColumn": "months_on_books" },
+          { "name": "outstanding_principal", "dataType": "double", "sourceColumn": "outstanding_principal" },
+          { "name": "accrued_interest", "dataType": "double", "sourceColumn": "accrued_interest" },
           { "name": "days_past_due", "dataType": "int64", "sourceColumn": "days_past_due" },
           { "name": "delinquency_bucket", "dataType": "string", "sourceColumn": "delinquency_bucket" },
-          { "name": "is_impaired", "dataType": "int64", "sourceColumn": "is_impaired" },
-          { "name": "ecl_stage", "dataType": "int64", "sourceColumn": "ecl_stage" }
+          { "name": "is_par30", "dataType": "int64", "sourceColumn": "is_par30" },
+          { "name": "is_par60", "dataType": "int64", "sourceColumn": "is_par60" },
+          { "name": "is_par90", "dataType": "int64", "sourceColumn": "is_par90" },
+          { "name": "is_npl", "dataType": "int64", "sourceColumn": "is_npl" },
+          { "name": "loan_status", "dataType": "string", "sourceColumn": "loan_status" }
         ],
         "measures": [
           {
             "name": "Total Outstanding Balance",
-            "expression": "SUM(fct_loan_monthly_snapshot[outstanding_balance])",
+            "expression": "SUM(fct_loan_monthly_snapshot[outstanding_principal])",
             "formatString": "$#,##0.00"
           },
           {
             "name": "PAR 30 Balance",
-            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_balance]), fct_loan_monthly_snapshot[days_past_due] >= 30)",
+            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par30] = 1)",
             "formatString": "$#,##0.00"
           },
           {
@@ -190,7 +200,7 @@
           },
           {
             "name": "PAR 60 Balance",
-            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_balance]), fct_loan_monthly_snapshot[days_past_due] >= 60)",
+            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par60] = 1)",
             "formatString": "$#,##0.00"
           },
           {
@@ -200,7 +210,7 @@
           },
           {
             "name": "PAR 90 Balance",
-            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_balance]), fct_loan_monthly_snapshot[days_past_due] >= 90)",
+            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par90] = 1)",
             "formatString": "$#,##0.00"
           },
           {
@@ -210,7 +220,7 @@
           },
           {
             "name": "NPL Balance",
-            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_balance]), fct_loan_monthly_snapshot[is_impaired] = 1)",
+            "expression": "CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_npl] = 1)",
             "formatString": "$#,##0.00"
           },
           {
@@ -227,9 +237,9 @@
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_loan_monthly_snapshot.csv\"), [Delimiter=\",\", Columns=12, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_loan_monthly_snapshot.csv\"), [Delimiter=\",\", Columns=16, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
-                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"snapshot_key\", Int64.Type}, {\"snapshot_date_key\", Int64.Type}, {\"loan_key\", Int64.Type}, {\"customer_key\", Int64.Type}, {\"product_key\", Int64.Type}, {\"outstanding_balance\", type number}, {\"principal_due\", type number}, {\"interest_due\", type number}, {\"days_past_due\", Int64.Type}, {\"delinquency_bucket\", type text}, {\"is_impaired\", Int64.Type}, {\"ecl_stage\", Int64.Type}})",
+                "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"snapshot_id\", type text}, {\"snapshot_date_id\", type text}, {\"snapshot_date\", type date}, {\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"months_on_books\", Int64.Type}, {\"outstanding_principal\", type number}, {\"accrued_interest\", type number}, {\"days_past_due\", Int64.Type}, {\"delinquency_bucket\", type text}, {\"is_par30\", Int64.Type}, {\"is_par60\", Int64.Type}, {\"is_par90\", Int64.Type}, {\"is_npl\", Int64.Type}, {\"loan_status\", type text}})",
                 "in",
                 "    #\"Changed Type\""
               ]
@@ -242,44 +252,44 @@
       {
         "name": "fct_snapshot_to_date",
         "fromTable": "fct_loan_monthly_snapshot",
-        "fromColumn": "snapshot_date_key",
+        "fromColumn": "snapshot_date_id",
         "toTable": "dim_date",
-        "toColumn": "date_key"
+        "toColumn": "date_id"
       },
       {
         "name": "fct_snapshot_to_customer",
         "fromTable": "fct_loan_monthly_snapshot",
-        "fromColumn": "customer_key",
+        "fromColumn": "customer_id",
         "toTable": "dim_customer",
-        "toColumn": "customer_key"
+        "toColumn": "customer_id"
       },
       {
         "name": "fct_snapshot_to_product",
         "fromTable": "fct_loan_monthly_snapshot",
-        "fromColumn": "product_key",
+        "fromColumn": "product_id",
         "toTable": "dim_product",
-        "toColumn": "product_key"
+        "toColumn": "product_id"
       },
       {
         "name": "fct_snapshot_to_loan",
         "fromTable": "fct_loan_monthly_snapshot",
-        "fromColumn": "loan_key",
+        "fromColumn": "loan_id",
         "toTable": "dim_loan",
-        "toColumn": "loan_key"
+        "toColumn": "loan_id"
       },
       {
         "name": "fct_repayment_to_loan",
         "fromTable": "fct_daily_repayment",
-        "fromColumn": "loan_key",
+        "fromColumn": "loan_id",
         "toTable": "dim_loan",
-        "toColumn": "loan_key"
+        "toColumn": "loan_id"
       },
       {
         "name": "fct_repayment_to_date",
         "fromTable": "fct_daily_repayment",
-        "fromColumn": "payment_date_key",
+        "fromColumn": "payment_date_id",
         "toTable": "dim_date",
-        "toColumn": "date_key"
+        "toColumn": "date_id"
       }
     ]
   }
