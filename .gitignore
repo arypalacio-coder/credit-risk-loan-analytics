@@ -17,3 +17,5 @@ __pycache__/
 *.AutoSave*
 SecurityBindings
 *.user.json
+data/
+*.duckdb
