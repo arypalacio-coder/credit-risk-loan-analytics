@@ -7,6 +7,7 @@
       "legacyRedirects": true,
       "returnErrorValuesAsNull": true
     },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
     "tables": [
       {
         "name": "dim_customer",
@@ -21,13 +22,13 @@
         ],
         "partitions": [
           {
-            "name": "dim_customer",
+            "name": "dim_customer-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/dim_customer.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_customer.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"customer_key\", Int64.Type}, {\"customer_id\", type text}, {\"credit_score\", Int64.Type}, {\"risk_rating\", type text}, {\"annual_income\", type number}, {\"employment_status\", type text}, {\"geographic_region\", type text}})",
                 "in",
@@ -51,13 +52,13 @@
         ],
         "partitions": [
           {
-            "name": "dim_date",
+            "name": "dim_date-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/dim_date.csv\"), [Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_date.csv\"), [Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"date_key\", Int64.Type}, {\"date\", type date}, {\"year\", Int64.Type}, {\"quarter\", Int64.Type}, {\"month\", Int64.Type}, {\"month_name\", type text}, {\"day\", Int64.Type}, {\"day_of_week\", type text}})",
                 "in",
@@ -83,13 +84,13 @@
         ],
         "partitions": [
           {
-            "name": "dim_loan",
+            "name": "dim_loan-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/dim_loan.csv\"), [Delimiter=\",\", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_loan.csv\"), [Delimiter=\",\", Columns=10, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"loan_key\", Int64.Type}, {\"loan_id\", type text}, {\"customer_key\", Int64.Type}, {\"product_key\", Int64.Type}, {\"disbursement_date_key\", Int64.Type}, {\"maturity_date_key\", Int64.Type}, {\"original_principal\", type number}, {\"interest_rate\", type number}, {\"term_months\", Int64.Type}, {\"loan_status\", type text}})",
                 "in",
@@ -110,13 +111,13 @@
         ],
         "partitions": [
           {
-            "name": "dim_product",
+            "name": "dim_product-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/dim_product.csv\"), [Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_product.csv\"), [Delimiter=\",\", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"product_key\", Int64.Type}, {\"product_id\", type text}, {\"product_name\", type text}, {\"product_type\", type text}, {\"collateral_type\", type text}})",
                 "in",
@@ -139,13 +140,13 @@
         ],
         "partitions": [
           {
-            "name": "fct_daily_repayment",
+            "name": "fct_daily_repayment-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/fct_daily_repayment.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_daily_repayment.csv\"), [Delimiter=\",\", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"repayment_key\", Int64.Type}, {\"loan_key\", Int64.Type}, {\"payment_date_key\", Int64.Type}, {\"principal_paid\", type number}, {\"interest_paid\", type number}, {\"fee_paid\", type number}, {\"total_payment\", type number}})",
                 "in",
@@ -220,13 +221,13 @@
         ],
         "partitions": [
           {
-            "name": "fct_loan_monthly_snapshot",
+            "name": "fct_loan_monthly_snapshot-Partition",
             "mode": "import",
             "source": {
               "type": "m",
               "expression": [
                 "let",
-                "    Source = Csv.Document(File.Contents(\"data/fct_loan_monthly_snapshot.csv\"), [Delimiter=\",\", Columns=12, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
+                "    Source = Csv.Document(File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_loan_monthly_snapshot.csv\"), [Delimiter=\",\", Columns=12, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    #\"Promoted Headers\" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),",
                 "    #\"Changed Type\" = Table.TransformColumnTypes(#\"Promoted Headers\",{{\"snapshot_key\", Int64.Type}, {\"snapshot_date_key\", Int64.Type}, {\"loan_key\", Int64.Type}, {\"customer_key\", Int64.Type}, {\"product_key\", Int64.Type}, {\"outstanding_balance\", type number}, {\"principal_due\", type number}, {\"interest_due\", type number}, {\"days_past_due\", Int64.Type}, {\"delinquency_bucket\", type text}, {\"is_impaired\", Int64.Type}, {\"ecl_stage\", Int64.Type}})",
                 "in",
