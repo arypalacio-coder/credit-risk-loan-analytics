@@ -180,7 +180,7 @@
           { "name": "outstanding_principal", "dataType": "double", "sourceColumn": "outstanding_principal" },
           { "name": "accrued_interest", "dataType": "double", "sourceColumn": "accrued_interest" },
           { "name": "days_past_due", "dataType": "int64", "sourceColumn": "days_past_due" },
-          { "delinquency_bucket": "string", "name": "delinquency_bucket", "dataType": "string", "sourceColumn": "delinquency_bucket" },
+          { "name": "delinquency_bucket", "dataType": "string", "sourceColumn": "delinquency_bucket" },
           { "name": "is_par30", "dataType": "int64", "sourceColumn": "is_par30" },
           { "name": "is_par60", "dataType": "int64", "sourceColumn": "is_par60" },
           { "name": "is_par90", "dataType": "int64", "sourceColumn": "is_par90" },
