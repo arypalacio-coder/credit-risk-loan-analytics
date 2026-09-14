@@ -63,7 +63,7 @@
                 "    CsvFile = File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_date.csv\"),",
                 "    TableData = Csv.Document(CsvFile, [Delimiter=\",\", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Headers, {{\"date_id\", type text}, {\"full_date\", type datetime}, {\"year_num\", Int64.Type}, {\"quarter_num\", Int64.Type}, {\"month_num\", Int64.Type}, {\"month_name\", type text}, {\"year_month\", type text}, {\"is_month_end\", type logical}})",
+                "    Typed = Table.TransformColumnTypes(Headers, {{\"date_id\", type text}, {\"full_date\", type datetime}, {\"year_num\", Int64.Type}, {\"quarter_num\", Int64.Type}, {\"month_num\", Int64.Type}, {\"month_name\", type text}, {\"year_month\", type text}, {\"is_month_end\", type logical}}, \"es-CL\")",
                 "in",
                 "    Typed"
               ]
@@ -97,7 +97,7 @@
                 "    CsvFile = File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_loan.csv\"),",
                 "    TableData = Csv.Document(CsvFile, [Delimiter=\",\", Columns=11, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Headers, {{\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"origination_date\", type datetime}, {\"origination_year_month\", type text}, {\"original_principal\", type number}, {\"annual_interest_rate\", type number}, {\"term_months\", Int64.Type}, {\"monthly_installment\", type number}, {\"initial_credit_score\", Int64.Type}, {\"initial_risk_grade\", type text}})",
+                "    Typed = Table.TransformColumnTypes(Headers, {{\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"origination_date\", type datetime}, {\"origination_year_month\", type text}, {\"original_principal\", type number}, {\"annual_interest_rate\", type number}, {\"term_months\", Int64.Type}, {\"monthly_installment\", type number}, {\"initial_credit_score\", Int64.Type}, {\"initial_risk_grade\", type text}}, \"es-CL\")",
                 "in",
                 "    Typed"
               ]
@@ -159,7 +159,7 @@
                 "    CsvFile = File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_daily_repayment.csv\"),",
                 "    TableData = Csv.Document(CsvFile, [Delimiter=\",\", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Headers, {{\"repayment_id\", type text}, {\"payment_date_id\", type text}, {\"payment_date\", type datetime}, {\"loan_id\", type text}, {\"principal_paid\", type number}, {\"interest_paid\", type number}, {\"fees_paid\", type number}, {\"total_paid\", type number}, {\"days_past_due_at_payment\", Int64.Type}})",
+                "    Typed = Table.TransformColumnTypes(Headers, {{\"repayment_id\", type text}, {\"payment_date_id\", type text}, {\"payment_date\", type datetime}, {\"loan_id\", type text}, {\"principal_paid\", type number}, {\"interest_paid\", type number}, {\"fees_paid\", type number}, {\"total_paid\", type number}, {\"days_past_due_at_payment\", Int64.Type}}, \"es-CL\")",
                 "in",
                 "    Typed"
               ]
@@ -245,7 +245,7 @@
                 "    CsvFile = File.Contents(\"C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_loan_monthly_snapshot.csv\"),",
                 "    TableData = Csv.Document(CsvFile, [Delimiter=\",\", Columns=16, Encoding=65001, QuoteStyle=QuoteStyle.None]),",
                 "    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),",
-                "    Typed = Table.TransformColumnTypes(Headers, {{\"snapshot_id\", type text}, {\"snapshot_date_id\", type text}, {\"snapshot_date\", type datetime}, {\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"months_on_books\", Int64.Type}, {\"outstanding_principal\", type number}, {\"accrued_interest\", type number}, {\"days_past_due\", Int64.Type}, {\"delinquency_bucket\", type text}, {\"is_par30\", Int64.Type}, {\"is_par60\", Int64.Type}, {\"is_par90\", Int64.Type}, {\"is_npl\", Int64.Type}, {\"loan_status\", type text}})",
+                "    Typed = Table.TransformColumnTypes(Headers, {{\"snapshot_id\", type text}, {\"snapshot_date_id\", type text}, {\"snapshot_date\", type datetime}, {\"loan_id\", type text}, {\"customer_id\", type text}, {\"product_id\", type text}, {\"months_on_books\", Int64.Type}, {\"outstanding_principal\", type number}, {\"accrued_interest\", type number}, {\"days_past_due\", Int64.Type}, {\"delinquency_bucket\", type text}, {\"is_par30\", Int64.Type}, {\"is_par60\", Int64.Type}, {\"is_par90\", Int64.Type}, {\"is_npl\", Int64.Type}, {\"loan_status\", type text}}, \"es-CL\")",
                 "in",
                 "    Typed"
               ]
