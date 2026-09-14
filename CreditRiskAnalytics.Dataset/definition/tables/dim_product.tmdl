@@ -1,0 +1,58 @@
+table dim_product
+lineageTag: a1b2c3d4-prod-0002
+
+column product_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-prod-col1
+summarizeBy: none
+sourceColumn: product_id
+
+column product_name
+dataType: string
+lineageTag: a1b2c3d4-prod-col2
+summarizeBy: none
+sourceColumn: product_name
+
+column product_category
+dataType: string
+lineageTag: a1b2c3d4-prod-col3
+summarizeBy: none
+sourceColumn: product_category
+
+column collateral_type
+dataType: string
+lineageTag: a1b2c3d4-prod-col4
+summarizeBy: none
+sourceColumn: collateral_type
+
+column min_term_months
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-prod-col5
+summarizeBy: none
+sourceColumn: min_term_months
+
+column max_term_months
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-prod-col6
+summarizeBy: none
+sourceColumn: max_term_months
+
+column base_annual_rate
+dataType: double
+formatString: 0.00%
+lineageTag: a1b2c3d4-prod-col7
+summarizeBy: none
+sourceColumn: base_annual_rate
+
+partition dim_product = m
+mode: import
+source =
+let
+Source = Csv.Document(File.Contents("data/dim_product.csv"),[Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"product_id", Int64.Type}, {"product_name", type text}, {"product_category", type text}, {"collateral_type", type text}, {"min_term_months", Int64.Type}, {"max_term_months", Int64.Type}, {"base_annual_rate", type number}})
+in
+#"Changed Type"

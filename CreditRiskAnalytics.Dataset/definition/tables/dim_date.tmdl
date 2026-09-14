@@ -1,0 +1,67 @@
+table dim_date
+lineageTag: a1b2c3d4-date-0001
+
+column date_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-date-col1
+summarizeBy: none
+sourceColumn: date_id
+
+column full_date
+dataType: dateTime
+formatString: yyyy-mm-dd
+lineageTag: a1b2c3d4-date-col2
+summarizeBy: none
+sourceColumn: full_date
+
+column year_num
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-date-col3
+summarizeBy: none
+sourceColumn: year_num
+
+column quarter_num
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-date-col4
+summarizeBy: none
+sourceColumn: quarter_num
+
+column month_num
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-date-col5
+summarizeBy: none
+sourceColumn: month_num
+
+column month_name
+dataType: string
+lineageTag: a1b2c3d4-date-col6
+summarizeBy: none
+sourceColumn: month_name
+sortByColumn: month_num
+
+column year_month
+dataType: string
+lineageTag: a1b2c3d4-date-col7
+summarizeBy: none
+sourceColumn: year_month
+
+column is_month_end
+dataType: boolean
+formatString: """TRUE"";""TRUE"";""FALSE"""
+lineageTag: a1b2c3d4-date-col8
+summarizeBy: none
+sourceColumn: is_month_end
+
+partition dim_date = m
+mode: import
+source =
+let
+Source = Csv.Document(File.Contents("data/dim_date.csv"),[Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date_id", Int64.Type}, {"full_date", type date}, {"year_num", Int64.Type}, {"quarter_num", Int64.Type}, {"month_num", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"is_month_end", type logical}})
+in
+#"Changed Type"

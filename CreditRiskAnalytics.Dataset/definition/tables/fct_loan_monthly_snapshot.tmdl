@@ -1,0 +1,167 @@
+table fct_loan_monthly_snapshot
+lineageTag: a1b2c3d4-fact-0006
+
+measure 'Outstanding Portfolio' = SUM(fct_loan_monthly_snapshot[outstanding_principal])
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: m-risk-001
+
+measure 'Active Loans Count' = CALCULATE(DISTINCTCOUNT(fct_loan_monthly_snapshot[loan_id]), fct_loan_monthly_snapshot[outstanding_principal] > 0)
+formatString: #,0
+lineageTag: m-risk-002
+
+measure 'PAR 30 Amount' = CALCULATE([Outstanding Portfolio], fct_loan_monthly_snapshot[is_par30] = TRUE())
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: m-risk-003
+
+measure 'PAR 30 Ratio' = DIVIDE([PAR 30 Amount], [Outstanding Portfolio], 0)
+formatString: 0.00%
+lineageTag: m-risk-004
+
+measure 'PAR 60 Amount' = CALCULATE([Outstanding Portfolio], fct_loan_monthly_snapshot[is_par60] = TRUE())
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: m-risk-005
+
+measure 'PAR 60 Ratio' = DIVIDE([PAR 60 Amount], [Outstanding Portfolio], 0)
+formatString: 0.00%
+lineageTag: m-risk-006
+
+measure 'PAR 90 Amount' = CALCULATE([Outstanding Portfolio], fct_loan_monthly_snapshot[is_par90] = TRUE())
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: m-risk-007
+
+measure 'PAR 90 Ratio' = DIVIDE([PAR 90 Amount], [Outstanding Portfolio], 0)
+formatString: 0.00%
+lineageTag: m-risk-008
+
+measure 'NPL Amount' = CALCULATE([Outstanding Portfolio], fct_loan_monthly_snapshot[is_npl] = TRUE())
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: m-risk-009
+
+measure 'NPL Ratio' = DIVIDE([NPL Amount], [Outstanding Portfolio], 0)
+formatString: 0.00%
+lineageTag: m-risk-010
+
+measure 'Cumulative Default Rate (Vintage)' = 
+VAR OriginatedVolume = CALCULATE(SUM(dim_loan[original_principal]), ALL(fct_loan_monthly_snapshot[months_on_books]))
+RETURN DIVIDE([NPL Amount], OriginatedVolume, 0)
+formatString: 0.00%
+lineageTag: m-risk-011
+
+column snapshot_id
+dataType: string
+lineageTag: a1b2c3d4-snp-col1
+summarizeBy: none
+sourceColumn: snapshot_id
+
+column snapshot_date_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col2
+summarizeBy: none
+sourceColumn: snapshot_date_id
+
+column snapshot_date
+dataType: dateTime
+formatString: yyyy-mm-dd
+lineageTag: a1b2c3d4-snp-col3
+summarizeBy: none
+sourceColumn: snapshot_date
+
+column loan_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col4
+summarizeBy: none
+sourceColumn: loan_id
+
+column customer_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col5
+summarizeBy: none
+sourceColumn: customer_id
+
+column product_id
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col6
+summarizeBy: none
+sourceColumn: product_id
+
+column months_on_books
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col7
+summarizeBy: none
+sourceColumn: months_on_books
+
+column outstanding_principal
+dataType: double
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: a1b2c3d4-snp-col8
+summarizeBy: sum
+sourceColumn: outstanding_principal
+
+column accrued_interest
+dataType: double
+formatString: \$#,0.00;(\$#,0.00);\.00
+lineageTag: a1b2c3d4-snp-col9
+summarizeBy: sum
+sourceColumn: accrued_interest
+
+column days_past_due
+dataType: int64
+formatString: 0
+lineageTag: a1b2c3d4-snp-col10
+summarizeBy: none
+sourceColumn: days_past_due
+
+column delinquency_bucket
+dataType: string
+lineageTag: a1b2c3d4-snp-col11
+summarizeBy: none
+sourceColumn: delinquency_bucket
+
+column is_par30
+dataType: boolean
+formatString: """TRUE"";""TRUE"";""FALSE"""
+lineageTag: a1b2c3d4-snp-col12
+summarizeBy: none
+sourceColumn: is_par30
+
+column is_par60
+dataType: boolean
+formatString: """TRUE"";""TRUE"";""FALSE"""
+lineageTag: a1b2c3d4-snp-col13
+summarizeBy: none
+sourceColumn: is_par60
+
+column is_par90
+dataType: boolean
+formatString: """TRUE"";""TRUE"";""FALSE"""
+lineageTag: a1b2c3d4-snp-col14
+summarizeBy: none
+sourceColumn: is_par90
+
+column is_npl
+dataType: boolean
+formatString: """TRUE"";""TRUE"";""FALSE"""
+lineageTag: a1b2c3d4-snp-col15
+summarizeBy: none
+sourceColumn: is_npl
+
+column loan_status
+dataType: string
+lineageTag: a1b2c3d4-snp-col16
+summarizeBy: none
+sourceColumn: loan_status
+
+partition fct_loan_monthly_snapshot = m
+mode: import
+source =
+let
+Source = Csv.Document(File.Contents("data/fct_loan_monthly_snapshot.csv"),[Delimiter=",", Columns=16, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+#"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+#"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"snapshot_id", type text}, {"snapshot_date_id", Int64.Type}, {"snapshot_date", type date}, {"loan_id", Int64.Type}, {"customer_id", Int64.Type}, {"product_id", Int64.Type}, {"months_on_books", Int64.Type}, {"outstanding_principal", type number}, {"accrued_interest", type number}, {"days_past_due", Int64.Type}, {"delinquency_bucket", type text}, {"is_par30", type logical}, {"is_par60", type logical}, {"is_par90", type logical}, {"is_npl", type logical}, {"loan_status", type text}})
+in
+#"Changed Type"
