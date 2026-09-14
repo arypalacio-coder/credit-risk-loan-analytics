@@ -1,0 +1,19 @@
+# Local environments & temporary files
+.venv/
+__pycache__/
+*.pyc
+*.tmp
+*.log
+
+# Databases & local state
+*.duckdb
+*.duckdb.wal
+*.db
+*.sqlite
+
+# Power BI local cache
+*.pbix
+*.pbit
+*.AutoSave*
+SecurityBindings
+*.user.json

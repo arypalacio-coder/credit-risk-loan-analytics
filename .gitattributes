@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.tmdl text eol=crlf
+*.json text eol=crlf
+*.pbip text eol=crlf
+*.sql text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.png binary
