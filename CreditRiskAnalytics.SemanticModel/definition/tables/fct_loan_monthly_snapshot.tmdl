@@ -1,0 +1,130 @@
+table fct_loan_monthly_snapshot
+	lineageTag: e7ff5a3f-e483-4516-aede-f451be922fe4
+
+	measure 'Total Outstanding Balance' = SUM(fct_loan_monthly_snapshot[outstanding_principal])
+		formatString: $#,##0.00
+		lineageTag: 6834632b-e032-483d-bf8e-eb9978541a5e
+
+	measure 'PAR 30 Balance' = CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par30] = 1)
+		formatString: $#,##0.00
+		lineageTag: 8f38ec8d-1d30-474f-9480-cd6919f6e769
+
+	measure 'PAR 30 Ratio' = DIVIDE([PAR 30 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: c668f8cd-2c2e-4eee-b37e-05853807f6cc
+
+	measure 'PAR 60 Balance' = CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par60] = 1)
+		formatString: $#,##0.00
+		lineageTag: 96af03e4-ac4a-4cbc-b768-419434248b6d
+
+	measure 'PAR 60 Ratio' = DIVIDE([PAR 60 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: 1dd523a0-b9dd-43e9-94b5-00458d9c63e4
+
+	measure 'PAR 90 Balance' = CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_par90] = 1)
+		formatString: $#,##0.00
+		lineageTag: b53229c5-e763-4672-a1e2-0c1c7cb5ed45
+
+	measure 'PAR 90 Ratio' = DIVIDE([PAR 90 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: 709b18e3-a096-4f13-9857-0a89306f18f0
+
+	measure 'NPL Balance' = CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[is_npl] = 1)
+		formatString: $#,##0.00
+		lineageTag: e9f25f2c-12d8-44c0-b5bc-87c5b53f4a6e
+
+	measure 'NPL Ratio' = DIVIDE([NPL Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: 1b84677f-31f0-4e8c-8e92-d2adef874f3b
+
+	column snapshot_id
+		dataType: string
+		lineageTag: 73b55c4a-d5c9-4f47-8882-10f1f5812f3d
+		sourceColumn: snapshot_id
+
+	column snapshot_date_id
+		dataType: string
+		lineageTag: 2c64d356-1a41-45b7-8a1a-109fb5f3067c
+		sourceColumn: snapshot_date_id
+
+	column snapshot_date
+		dataType: dateTime
+		lineageTag: fe6cbd88-790e-4557-a670-0d791b07afa4
+		sourceColumn: snapshot_date
+
+	column loan_id
+		dataType: string
+		lineageTag: d025e2ee-81f0-4c60-b569-3d8750d30fb7
+		sourceColumn: loan_id
+
+	column customer_id
+		dataType: string
+		lineageTag: d7c9298a-5663-41f4-9b37-46b87930339b
+		sourceColumn: customer_id
+
+	column product_id
+		dataType: string
+		lineageTag: 90d85b80-291f-42c8-9c7c-69e170735337
+		sourceColumn: product_id
+
+	column months_on_books
+		dataType: int64
+		lineageTag: 38528140-3b19-4283-8b46-c1c0e1aba9de
+		sourceColumn: months_on_books
+
+	column outstanding_principal
+		dataType: double
+		lineageTag: 155be869-cd65-4813-a604-3d1351dad522
+		sourceColumn: outstanding_principal
+
+	column accrued_interest
+		dataType: double
+		lineageTag: 0f6135f4-3561-4830-82bb-f9ba03cb23fe
+		sourceColumn: accrued_interest
+
+	column days_past_due
+		dataType: int64
+		lineageTag: 57568e00-94d8-4a59-b77a-bdb4bfbb7f96
+		sourceColumn: days_past_due
+
+	column delinquency_bucket
+		dataType: string
+		lineageTag: b97c68cf-1326-46c9-be89-ab0f410012e1
+		sourceColumn: delinquency_bucket
+
+	column is_par30
+		dataType: int64
+		lineageTag: 2a92ad19-7792-4070-b781-dbe224bb3e9e
+		sourceColumn: is_par30
+
+	column is_par60
+		dataType: int64
+		lineageTag: 02f6ede3-0fdd-4923-b603-db288f963e9b
+		sourceColumn: is_par60
+
+	column is_par90
+		dataType: int64
+		lineageTag: c810ac60-815b-4dea-a4e9-5fd9b9147141
+		sourceColumn: is_par90
+
+	column is_npl
+		dataType: int64
+		lineageTag: d303016e-2544-4b18-bc2c-1541e1c56992
+		sourceColumn: is_npl
+
+	column loan_status
+		dataType: string
+		lineageTag: dea82863-c523-4608-ae0b-c82fe858b148
+		sourceColumn: loan_status
+
+	partition fct_loan_monthly_snapshot_Partition = m
+		mode: import
+		source =
+				let
+				    CsvFile = File.Contents("C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_loan_monthly_snapshot.csv"),
+				    TableData = Csv.Document(CsvFile, [Delimiter=",", Columns=16, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"snapshot_id", type text}, {"snapshot_date_id", type text}, {"snapshot_date", type datetime}, {"loan_id", type text}, {"customer_id", type text}, {"product_id", type text}, {"months_on_books", Int64.Type}, {"outstanding_principal", type number}, {"accrued_interest", type number}, {"days_past_due", Int64.Type}, {"delinquency_bucket", type text}, {"is_par30", Int64.Type}, {"is_par60", Int64.Type}, {"is_par90", Int64.Type}, {"is_npl", Int64.Type}, {"loan_status", type text}}, "es-CL")
+				in
+				    Typed
+

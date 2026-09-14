@@ -1,0 +1,59 @@
+table fct_daily_repayment
+	lineageTag: 1b2fc4bf-b89d-4252-ab32-78752477ae7b
+
+	column repayment_id
+		dataType: string
+		lineageTag: 4888fdb0-21ce-40b1-958c-0a91a9be0941
+		sourceColumn: repayment_id
+
+	column payment_date_id
+		dataType: string
+		lineageTag: 956f34b8-c1d5-442e-b2b7-f13ce9f959b4
+		sourceColumn: payment_date_id
+
+	column payment_date
+		dataType: dateTime
+		lineageTag: b7c2188a-3d22-450d-b326-8fb858f3b0e4
+		sourceColumn: payment_date
+
+	column loan_id
+		dataType: string
+		lineageTag: f9045b01-38dd-4d45-8e24-80666f8e0e1f
+		sourceColumn: loan_id
+
+	column principal_paid
+		dataType: double
+		lineageTag: b8624f5f-d678-4486-a0a1-9bf7ee18bf4f
+		sourceColumn: principal_paid
+
+	column interest_paid
+		dataType: double
+		lineageTag: 1f6a532f-89c7-4020-bb74-82ed3382216f
+		sourceColumn: interest_paid
+
+	column fees_paid
+		dataType: double
+		lineageTag: 16b3b2e5-42ae-47d7-b21e-696cf71e6607
+		sourceColumn: fees_paid
+
+	column total_paid
+		dataType: double
+		lineageTag: 2508b47e-c051-487b-97fd-65674ef5772d
+		sourceColumn: total_paid
+
+	column days_past_due_at_payment
+		dataType: int64
+		lineageTag: dee63553-4901-43ad-a20a-bbd62ef0fed0
+		sourceColumn: days_past_due_at_payment
+
+	partition fct_daily_repayment_Partition = m
+		mode: import
+		source =
+				let
+				    CsvFile = File.Contents("C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/fct_daily_repayment.csv"),
+				    TableData = Csv.Document(CsvFile, [Delimiter=",", Columns=9, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"repayment_id", type text}, {"payment_date_id", type text}, {"payment_date", type datetime}, {"loan_id", type text}, {"principal_paid", type number}, {"interest_paid", type number}, {"fees_paid", type number}, {"total_paid", type number}, {"days_past_due_at_payment", Int64.Type}}, "es-CL")
+				in
+				    Typed
+

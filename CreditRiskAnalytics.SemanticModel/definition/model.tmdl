@@ -1,0 +1,19 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CL
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["dim_customer","dim_date","dim_loan","dim_product","fct_daily_repayment","fct_loan_monthly_snapshot"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_customer
+ref table dim_date
+ref table dim_loan
+ref table dim_product
+ref table fct_daily_repayment
+ref table fct_loan_monthly_snapshot
+

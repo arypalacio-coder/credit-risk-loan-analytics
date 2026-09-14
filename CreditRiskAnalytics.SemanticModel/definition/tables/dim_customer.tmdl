@@ -1,0 +1,54 @@
+table dim_customer
+	lineageTag: 4bb666ca-e7f5-41a9-aae1-9f7d0739cb6f
+
+	column customer_id
+		dataType: string
+		lineageTag: cb11e8c4-c2e0-42d5-9f26-715367e69000
+		sourceColumn: customer_id
+
+	column customer_name
+		dataType: string
+		lineageTag: 614e282e-9223-40f2-adae-06e735dba7da
+		sourceColumn: customer_name
+
+	column age
+		dataType: int64
+		lineageTag: f1d2fe79-b687-4bd1-a28a-c5fd6c34da30
+		sourceColumn: age
+
+	column monthly_income
+		dataType: double
+		lineageTag: 284f7945-69b6-4508-a9f2-bdc0f11bf25e
+		sourceColumn: monthly_income
+
+	column credit_score
+		dataType: int64
+		lineageTag: a956046f-c250-4646-a952-8e422c17bce3
+		sourceColumn: credit_score
+
+	column credit_score_band
+		dataType: string
+		lineageTag: 82f4f272-4384-452a-9bc3-661f9f0ce530
+		sourceColumn: credit_score_band
+
+	column employment_type
+		dataType: string
+		lineageTag: e26fb7fe-4d3f-4c08-95cb-42e19a705966
+		sourceColumn: employment_type
+
+	column region
+		dataType: string
+		lineageTag: 2933d3d4-f120-488d-84ce-20b17be89b46
+		sourceColumn: region
+
+	partition dim_customer_Partition = m
+		mode: import
+		source =
+				let
+				    CsvFile = File.Contents("C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_customer.csv"),
+				    TableData = Csv.Document(CsvFile, [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"customer_id", type text}, {"customer_name", type text}, {"age", Int64.Type}, {"monthly_income", type number}, {"credit_score", Int64.Type}, {"credit_score_band", type text}, {"employment_type", type text}, {"region", type text}})
+				in
+				    Typed
+

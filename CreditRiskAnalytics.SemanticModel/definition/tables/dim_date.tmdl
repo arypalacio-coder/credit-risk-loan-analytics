@@ -1,0 +1,54 @@
+table dim_date
+	lineageTag: 7408edf9-63bd-4dd6-bbc7-1aa2be68567d
+
+	column date_id
+		dataType: string
+		lineageTag: 04791925-2594-41e4-91f0-665f959b8d53
+		sourceColumn: date_id
+
+	column full_date
+		dataType: dateTime
+		lineageTag: 7d33e310-1bbe-4e93-80e9-cd9500655da5
+		sourceColumn: full_date
+
+	column year_num
+		dataType: int64
+		lineageTag: 08b211b1-721c-4fde-9663-3dcc794851fe
+		sourceColumn: year_num
+
+	column quarter_num
+		dataType: int64
+		lineageTag: 22812bb0-6d23-4c5f-be60-c731e561cb3e
+		sourceColumn: quarter_num
+
+	column month_num
+		dataType: int64
+		lineageTag: 076c51d7-025e-41b8-9541-a1ded97c126a
+		sourceColumn: month_num
+
+	column month_name
+		dataType: string
+		lineageTag: 1fb7e99a-5741-43ec-b759-1b05f9b9f869
+		sourceColumn: month_name
+
+	column year_month
+		dataType: string
+		lineageTag: b73cfedf-d043-4190-b472-4f9e9716a729
+		sourceColumn: year_month
+
+	column is_month_end
+		dataType: boolean
+		lineageTag: b01d8863-79f5-41d5-bb90-a9b1fbc38dfc
+		sourceColumn: is_month_end
+
+	partition dim_date_Partition = m
+		mode: import
+		source =
+				let
+				    CsvFile = File.Contents("C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_date.csv"),
+				    TableData = Csv.Document(CsvFile, [Delimiter=",", Columns=8, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"date_id", type text}, {"full_date", type datetime}, {"year_num", Int64.Type}, {"quarter_num", Int64.Type}, {"month_num", Int64.Type}, {"month_name", type text}, {"year_month", type text}, {"is_month_end", type logical}}, "es-CL")
+				in
+				    Typed
+

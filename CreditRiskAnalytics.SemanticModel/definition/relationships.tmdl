@@ -1,0 +1,24 @@
+relationship fct_snapshot_to_date
+	fromColumn: fct_loan_monthly_snapshot.snapshot_date_id
+	toColumn: dim_date.date_id
+
+relationship fct_snapshot_to_customer
+	fromColumn: fct_loan_monthly_snapshot.customer_id
+	toColumn: dim_customer.customer_id
+
+relationship fct_snapshot_to_product
+	fromColumn: fct_loan_monthly_snapshot.product_id
+	toColumn: dim_product.product_id
+
+relationship fct_snapshot_to_loan
+	fromColumn: fct_loan_monthly_snapshot.loan_id
+	toColumn: dim_loan.loan_id
+
+relationship fct_repayment_to_loan
+	fromColumn: fct_daily_repayment.loan_id
+	toColumn: dim_loan.loan_id
+
+relationship fct_repayment_to_date
+	fromColumn: fct_daily_repayment.payment_date_id
+	toColumn: dim_date.date_id
+

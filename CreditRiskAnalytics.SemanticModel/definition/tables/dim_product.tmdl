@@ -1,0 +1,49 @@
+table dim_product
+	lineageTag: afbcfbdb-59ff-4a10-b89b-2c06ff170582
+
+	column product_id
+		dataType: string
+		lineageTag: e7a58198-5ec1-4ab5-b83c-509356a4c008
+		sourceColumn: product_id
+
+	column product_name
+		dataType: string
+		lineageTag: fe744168-e1b9-4d8e-a047-ec1db11cc73e
+		sourceColumn: product_name
+
+	column product_category
+		dataType: string
+		lineageTag: a5c96f53-ebe6-4aa0-ba1e-36133d1a7e6d
+		sourceColumn: product_category
+
+	column collateral_type
+		dataType: string
+		lineageTag: bd48cca2-00c6-4505-a63c-96a9fcfce632
+		sourceColumn: collateral_type
+
+	column min_term_months
+		dataType: int64
+		lineageTag: f8970c0a-a54e-411f-9e20-d646ce8597ea
+		sourceColumn: min_term_months
+
+	column max_term_months
+		dataType: int64
+		lineageTag: 16e26a5d-a810-4a39-87ac-a0ba31ec755b
+		sourceColumn: max_term_months
+
+	column base_annual_rate
+		dataType: double
+		lineageTag: 2c3f7252-fe5f-4580-8968-67ba69c24410
+		sourceColumn: base_annual_rate
+
+	partition dim_product_Partition = m
+		mode: import
+		source =
+				let
+				    CsvFile = File.Contents("C:/Users/Ary Palacios/Desktop/credit-risk-loan-analytics/data/dim_product.csv"),
+				    TableData = Csv.Document(CsvFile, [Delimiter=",", Columns=7, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    Headers = Table.PromoteHeaders(TableData, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Headers, {{"product_id", type text}, {"product_name", type text}, {"product_category", type text}, {"collateral_type", type text}, {"min_term_months", Int64.Type}, {"max_term_months", Int64.Type}, {"base_annual_rate", type number}})
+				in
+				    Typed
+
