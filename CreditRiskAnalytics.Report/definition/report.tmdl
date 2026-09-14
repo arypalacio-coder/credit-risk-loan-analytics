@@ -1,0 +1,8 @@
+report CreditRiskAnalytics
+lineageTag: rpt-credit-risk-0001
+
+page 'Portfolio Overview'
+displayName: "Portfolio & Delinquency Overview"
+
+page 'Vintage Analysis'
+displayName: "Vintage Curves & Loss Timing"
