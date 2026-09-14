@@ -1,0 +1,11 @@
+{
+  "name": "CreditRiskAnalytics",
+  "compatibilityLevel": 1567,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    }
+  }
+}
