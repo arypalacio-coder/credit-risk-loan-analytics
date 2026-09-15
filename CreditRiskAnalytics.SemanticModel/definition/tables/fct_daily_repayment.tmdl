@@ -4,47 +4,79 @@ table fct_daily_repayment
 	column repayment_id
 		dataType: string
 		lineageTag: 4888fdb0-21ce-40b1-958c-0a91a9be0941
+		summarizeBy: none
 		sourceColumn: repayment_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column payment_date_id
 		dataType: string
 		lineageTag: 956f34b8-c1d5-442e-b2b7-f13ce9f959b4
+		summarizeBy: none
 		sourceColumn: payment_date_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column payment_date
 		dataType: dateTime
 		lineageTag: b7c2188a-3d22-450d-b326-8fb858f3b0e4
+		summarizeBy: none
 		sourceColumn: payment_date
+
+		variation Variación
+			isDefault
+			relationship: a32f316d-ad20-496f-b9cb-8556a2dc75ad
+			defaultHierarchy: LocalDateTable_77dca5f3-f23d-43ee-bf7e-648a01a1e991.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
 
 	column loan_id
 		dataType: string
 		lineageTag: f9045b01-38dd-4d45-8e24-80666f8e0e1f
+		summarizeBy: none
 		sourceColumn: loan_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column principal_paid
 		dataType: double
 		lineageTag: b8624f5f-d678-4486-a0a1-9bf7ee18bf4f
+		summarizeBy: sum
 		sourceColumn: principal_paid
+
+		annotation SummarizationSetBy = Automatic
 
 	column interest_paid
 		dataType: double
 		lineageTag: 1f6a532f-89c7-4020-bb74-82ed3382216f
+		summarizeBy: sum
 		sourceColumn: interest_paid
+
+		annotation SummarizationSetBy = Automatic
 
 	column fees_paid
 		dataType: double
 		lineageTag: 16b3b2e5-42ae-47d7-b21e-696cf71e6607
+		summarizeBy: sum
 		sourceColumn: fees_paid
+
+		annotation SummarizationSetBy = Automatic
 
 	column total_paid
 		dataType: double
 		lineageTag: 2508b47e-c051-487b-97fd-65674ef5772d
+		summarizeBy: sum
 		sourceColumn: total_paid
+
+		annotation SummarizationSetBy = Automatic
 
 	column days_past_due_at_payment
 		dataType: int64
 		lineageTag: dee63553-4901-43ad-a20a-bbd62ef0fed0
+		summarizeBy: sum
 		sourceColumn: days_past_due_at_payment
+
+		annotation SummarizationSetBy = Automatic
 
 	partition fct_daily_repayment_Partition = m
 		mode: import

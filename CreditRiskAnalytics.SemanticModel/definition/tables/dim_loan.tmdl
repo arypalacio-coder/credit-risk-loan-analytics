@@ -4,57 +4,95 @@ table dim_loan
 	column loan_id
 		dataType: string
 		lineageTag: f6c0d985-6aaa-4ed7-b96c-3d517f957004
+		summarizeBy: none
 		sourceColumn: loan_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column customer_id
 		dataType: string
 		lineageTag: ec62fb48-9c96-4450-b1bc-af3aedea043e
+		summarizeBy: none
 		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column product_id
 		dataType: string
 		lineageTag: bf9ad149-990f-4e7b-9aac-6e692e3cf9a9
+		summarizeBy: none
 		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column origination_date
 		dataType: dateTime
 		lineageTag: cdb1f174-a03d-4f8a-9b80-da92fd4ef64a
+		summarizeBy: none
 		sourceColumn: origination_date
+
+		variation Variación
+			isDefault
+			relationship: deee1864-9ab2-434c-a3a8-b513ec28b590
+			defaultHierarchy: LocalDateTable_bec8ec3b-64a9-4e4e-a11f-a58d52803c45.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
 
 	column origination_year_month
 		dataType: string
 		lineageTag: 27a91683-8bdc-4dcc-8ad0-105efc90f678
+		summarizeBy: none
 		sourceColumn: origination_year_month
+
+		annotation SummarizationSetBy = Automatic
 
 	column original_principal
 		dataType: double
 		lineageTag: ac0b2f77-b118-4068-a1b5-c51697acedbe
+		summarizeBy: sum
 		sourceColumn: original_principal
+
+		annotation SummarizationSetBy = Automatic
 
 	column annual_interest_rate
 		dataType: double
 		lineageTag: 482c9b8c-8659-4afd-a31d-42f0480cbd81
+		summarizeBy: sum
 		sourceColumn: annual_interest_rate
+
+		annotation SummarizationSetBy = Automatic
 
 	column term_months
 		dataType: int64
 		lineageTag: e5229d09-49ac-40d7-b907-720f931d823f
+		summarizeBy: sum
 		sourceColumn: term_months
+
+		annotation SummarizationSetBy = Automatic
 
 	column monthly_installment
 		dataType: double
 		lineageTag: 710744b3-22c1-4ca9-9e4c-adb253d989f4
+		summarizeBy: sum
 		sourceColumn: monthly_installment
+
+		annotation SummarizationSetBy = Automatic
 
 	column initial_credit_score
 		dataType: int64
 		lineageTag: 7bc6b283-6369-4a8e-a0f7-af4a406705b1
+		summarizeBy: sum
 		sourceColumn: initial_credit_score
+
+		annotation SummarizationSetBy = Automatic
 
 	column initial_risk_grade
 		dataType: string
 		lineageTag: 9cc8b310-9c3e-434c-b588-a968fa35f9ff
+		summarizeBy: none
 		sourceColumn: initial_risk_grade
+
+		annotation SummarizationSetBy = Automatic
 
 	partition dim_loan_Partition = m
 		mode: import

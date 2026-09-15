@@ -41,6 +41,21 @@ table dim_customer
 		lineageTag: 2933d3d4-f120-488d-84ce-20b17be89b46
 		sourceColumn: region
 
+	column region_code =
+			
+			SWITCH(
+			    dim_customer[region],
+			    "LATAM Commercial", "LTAM",
+			    "North America", "NA",
+			    "Asia-Pacific", "APAC",
+			    "EMEA", "EMEA",
+			    dim_customer[region]
+			)
+		lineageTag: c8b9ecfb-3ff0-40aa-ad7e-f0d26f46f507
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition dim_customer_Partition = m
 		mode: import
 		source =

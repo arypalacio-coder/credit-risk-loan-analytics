@@ -4,7 +4,7 @@
     {
       "ordinal": 0,
       "scrollPosition": {
-        "x": 0,
+        "x": 240.34236224219615,
         "y": 0
       },
       "nodes": [
@@ -74,6 +74,19 @@
             "y": 172.26753899902445
           },
           "nodeIndex": "fct_loan_monthly_snapshot",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1180.1480283751362,
+            "y": 260.21994900244454
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
           "size": {
             "height": 300,
             "width": 234

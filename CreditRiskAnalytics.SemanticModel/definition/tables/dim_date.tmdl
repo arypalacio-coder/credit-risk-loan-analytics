@@ -4,42 +4,85 @@ table dim_date
 	column date_id
 		dataType: string
 		lineageTag: 04791925-2594-41e4-91f0-665f959b8d53
+		summarizeBy: none
 		sourceColumn: date_id
+
+		annotation SummarizationSetBy = Automatic
 
 	column full_date
 		dataType: dateTime
 		lineageTag: 7d33e310-1bbe-4e93-80e9-cd9500655da5
+		summarizeBy: none
 		sourceColumn: full_date
+
+		variation Variación
+			isDefault
+			relationship: c21d5a1e-92a2-40dd-b86b-a8fe1ff1c999
+			defaultHierarchy: LocalDateTable_6f2053d1-78e8-40ca-a6bd-e99cb85bd7ff.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
 
 	column year_num
 		dataType: int64
 		lineageTag: 08b211b1-721c-4fde-9663-3dcc794851fe
+		summarizeBy: sum
 		sourceColumn: year_num
+
+		annotation SummarizationSetBy = Automatic
 
 	column quarter_num
 		dataType: int64
 		lineageTag: 22812bb0-6d23-4c5f-be60-c731e561cb3e
+		summarizeBy: sum
 		sourceColumn: quarter_num
+
+		annotation SummarizationSetBy = Automatic
 
 	column month_num
 		dataType: int64
 		lineageTag: 076c51d7-025e-41b8-9541-a1ded97c126a
+		summarizeBy: sum
 		sourceColumn: month_num
+
+		annotation SummarizationSetBy = Automatic
 
 	column month_name
 		dataType: string
 		lineageTag: 1fb7e99a-5741-43ec-b759-1b05f9b9f869
+		summarizeBy: none
 		sourceColumn: month_name
+
+		annotation SummarizationSetBy = Automatic
 
 	column year_month
 		dataType: string
 		lineageTag: b73cfedf-d043-4190-b472-4f9e9716a729
+		summarizeBy: none
 		sourceColumn: year_month
+
+		annotation SummarizationSetBy = Automatic
 
 	column is_month_end
 		dataType: boolean
 		lineageTag: b01d8863-79f5-41d5-bb90-a9b1fbc38dfc
+		summarizeBy: none
 		sourceColumn: is_month_end
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_date =
+			
+			DATE(YEAR(dim_date[full_date]), MONTH(dim_date[full_date]), 1)
+		formatString: General Date
+		lineageTag: 11c1fc4a-b104-484f-bfd0-b1cd0d35a6b9
+		summarizeBy: none
+
+		variation Variación
+			isDefault
+			relationship: d731047a-8972-44e0-9ba1-18736c25a833
+			defaultHierarchy: LocalDateTable_5ef76954-86e5-4550-97ba-8833141e6eb7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
 
 	partition dim_date_Partition = m
 		mode: import

@@ -1,0 +1,89 @@
+table _Measures
+	isHidden
+	lineageTag: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+
+	measure 'Total Outstanding Balance' = SUM(fct_loan_monthly_snapshot[outstanding_principal])
+		formatString: $#,0.00
+		lineageTag: b2c3d4e5-f6a7-8901-bcde-f12345678901
+
+	measure 'Active Loans Count' = DISTINCTCOUNT(fct_loan_monthly_snapshot[loan_id])
+		formatString: #,0
+		lineageTag: c3d4e5f6-a7b8-9012-cdef-123456789012
+
+	measure 'Total Principal Collected' = SUM(fct_daily_repayment[principal_paid])
+		formatString: $#,0.00
+		lineageTag: d4e5f6a7-b8c9-0123-defa-234567890123
+
+	measure 'Total Interest Collected' = SUM(fct_daily_repayment[interest_paid])
+		formatString: $#,0.00
+		lineageTag: e5f6a7b8-c9d0-1234-efab-345678901234
+
+	measure 'PAR30 Balance' = CALCULATE([Total Outstanding Balance], fct_loan_monthly_snapshot[days_past_due] > 30)
+		formatString: $#,0.00
+		lineageTag: f6a7b8c9-d0e1-2345-fabc-456789012345
+
+	measure 'PAR30 Ratio' = DIVIDE([PAR30 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: a7b8c9d0-e1f2-3456-abcd-567890123456
+
+	measure 'PAR60 Balance' = CALCULATE([Total Outstanding Balance], fct_loan_monthly_snapshot[days_past_due] > 60)
+		formatString: $#,0.00
+		lineageTag: b8c9d0e1-f2a3-4567-bcde-678901234567
+
+	measure 'PAR60 Ratio' = DIVIDE([PAR60 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: c9d0e1f2-a3b4-5678-cdef-789012345678
+
+	measure 'PAR90 Balance' = CALCULATE([Total Outstanding Balance], fct_loan_monthly_snapshot[days_past_due] > 90)
+		formatString: $#,0.00
+		lineageTag: d0e1f2a3-b4c5-6789-defa-890123456789
+
+	measure 'PAR90 Ratio' = DIVIDE([PAR90 Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: e1f2a3b4-c5d6-7890-efab-901234567890
+
+	measure 'NPL Balance' = CALCULATE([Total Outstanding Balance], fct_loan_monthly_snapshot[days_past_due] >= 90)
+		formatString: $#,0.00
+		lineageTag: f2a3b4c5-d6e7-8901-fabc-012345678901
+
+	measure 'NPL Ratio' = DIVIDE([NPL Balance], [Total Outstanding Balance], 0)
+		formatString: 0.00%
+		lineageTag: a3b4c5d6-e7f8-9012-abcd-123456789012
+
+	measure 'Recovery Rate' = DIVIDE(SUM(fct_daily_repayment[total_paid]), CALCULATE([Total Outstanding Balance], fct_loan_monthly_snapshot[is_npl] = 1), 0)
+		formatString: 0.00%
+		lineageTag: b4c5d6e7-f8a9-0123-bcde-234567890123
+
+	measure 'Vintage Cumulative Delinquency' = DIVIDE(CALCULATE(SUM(fct_loan_monthly_snapshot[outstanding_principal]), fct_loan_monthly_snapshot[days_past_due] > 30), CALCULATE(SUM(dim_loan[original_principal]), ALLEXCEPT(dim_loan, dim_loan[origination_year_month])), 0)
+		formatString: 0.00%
+		lineageTag: c5d6e7f8-a9b0-1234-cdef-345678901234
+
+	measure 'Total Balance (M)' =
+			
+			DIVIDE([Total Outstanding Balance], 1e6)
+		formatString: #,0.0
+		lineageTag: cc420e47-7ce1-4f33-b12c-13e781e0dffb
+
+	measure 'Cumulative Interest' =
+			
+			CALCULATE(
+			    [Total Interest Collected],
+			    FILTER(
+			        ALLSELECTED(dim_date),
+			        dim_date[month_date] <= MAX(dim_date[month_date])
+			    )
+			)
+		lineageTag: d0d748e6-087f-425c-8a37-ad41c00b2afa
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column EmptyColumn
+		lineageTag: d48f0a05-0d9c-4483-9e0f-6dea95a9ad26
+		isNameInferred
+		sourceColumn: [EmptyColumn]
+
+	partition _Measures_Partition = calculated
+		source = ROW("EmptyColumn", 1)
+
+	annotation PBI_ResultType = Table
+

@@ -22,3 +22,28 @@ relationship fct_repayment_to_date
 	fromColumn: fct_daily_repayment.payment_date_id
 	toColumn: dim_date.date_id
 
+relationship c21d5a1e-92a2-40dd-b86b-a8fe1ff1c999
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_date.full_date
+	toColumn: LocalDateTable_6f2053d1-78e8-40ca-a6bd-e99cb85bd7ff.Date
+
+relationship deee1864-9ab2-434c-a3a8-b513ec28b590
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_loan.origination_date
+	toColumn: LocalDateTable_bec8ec3b-64a9-4e4e-a11f-a58d52803c45.Date
+
+relationship a32f316d-ad20-496f-b9cb-8556a2dc75ad
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fct_daily_repayment.payment_date
+	toColumn: LocalDateTable_77dca5f3-f23d-43ee-bf7e-648a01a1e991.Date
+
+relationship bb5974e9-0288-4f20-b956-66b80bc6d8ac
+	joinOnDateBehavior: datePartOnly
+	fromColumn: fct_loan_monthly_snapshot.snapshot_date
+	toColumn: LocalDateTable_8d3b01b8-7ca6-4fd5-8849-65cea5974ae2.Date
+
+relationship d731047a-8972-44e0-9ba1-18736c25a833
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_date.month_date
+	toColumn: LocalDateTable_5ef76954-86e5-4550-97ba-8833141e6eb7.Date
+
