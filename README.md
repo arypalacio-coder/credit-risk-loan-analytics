@@ -1,3 +1,23 @@
+# Credit Risk & Loan Portfolio Analytics
+
+An end-to-end data analytics and credit risk pipeline featuring data modeling in DuckDB/SQL, automated ETL workflows, and an executive Power BI portfolio dashboard.
+
+![Dashboard Preview](dashboard_overview.png)
+
+---
+
+## Executive Summary & Business Insights (April 2026 Snapshot)
+
+* **Total Outstanding Balance:** **$984.10M** across **1,291 active loans**.
+* **Portfolio Concentration:** **Auto Financing** represents the largest single lending product exposure (\~$470.3M), followed by **Microbusiness Capital** (\~$277.6M).
+* **Regional Distribution:** Credit deployment is balanced across **LATAM Commercial** ($259.2M), **North America** ($248.9M), **APAC** ($241.0M), and **EMEA** ($235.0M).
+* **Credit Quality & Delinquency:**
+  * **PAR30 Ratio:** **2.80%**
+  * **NPL Ratio:** **0.24%**
+  * Bulk of risk exposure resides in Risk Grades **B** and **C** (\~$290M and \~$305M respectively), reflecting a controlled credit expansion profile.
+* **Revenue Realization:** Monthly interest collected stands at **$13.80M**, with **Cumulative Interest Collection** accelerating smoothly toward **$300M+** across the multi-year cycle.
+
+
 # Credit Risk & Loan Portfolio Analytics Mart
 
 End-to-end automated credit risk and loan portfolio analytics pipeline implementing a Kimball dimensional star schema, automated SQL data quality validation with DuckDB, CI/CD integration via GitHub Actions, and semantic modeling for Power BI (PBIP/TMDL).
